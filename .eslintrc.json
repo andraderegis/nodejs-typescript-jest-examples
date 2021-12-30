@@ -33,6 +33,7 @@
         "import/no-dynamic-require": 0,
         "import/no-named-as-default": 0,
         "import/no-unresolved": 0,
+        "import/prefer-default-export": "off",
         "global-require": "off",
         "lines-between-class-members": "off",
         "max-len": [
@@ -48,6 +49,7 @@
         "no-underscore-dangle": "off",
         "no-unused-vars": "off",
         "no-params-reassing": "off",
+        "no-useless-constructor": "off",
         "no-param-reassign": [
             "error",
             {
