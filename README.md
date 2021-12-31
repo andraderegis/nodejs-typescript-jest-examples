@@ -1,2 +1,3 @@
-# typescript-node-setup
-Startup de projeto com configurações para Typescript, Eslint, Prettier e Babel
+# NodeJS Typescript Jest Examples
+
+Projeto com o objetivo de testar estratégias de mock com Jest
