@@ -36,6 +36,9 @@
       ],
       "@entities/*": [
         "entities/*"
+      ],
+      "@tests/*": [
+        "tests/*"
       ]
     },
     "skipLibCheck": true

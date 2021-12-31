@@ -9,7 +9,7 @@ export class CreateAccountServiceWithDI implements IService<AccountCreateParams,
 
     await this.repository.saveOrUpdate(account);
 
-    console.warn('CreateAccountServiceWithDI execute method called');
+    // console.warn('CreateAccountServiceWithDI execute method called');
 
     return {
       id: account.id,

@@ -7,7 +7,7 @@ export class AccountFakeRepository implements IRepository<Account> {
   saveOrUpdate(entity: Account): Promise<void> {
     this.accounts.set(entity.id, entity);
 
-    console.warn('AccountFakeRepository saveOrUpdate method called');
+    // console.info('AccountFakeRepository saveOrUpdate method called');
 
     return Promise.resolve();
   }

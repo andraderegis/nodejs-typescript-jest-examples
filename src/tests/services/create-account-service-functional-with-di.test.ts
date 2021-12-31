@@ -1,26 +1,34 @@
-import { AccountFakeRepository } from '@repositories/index';
-import { CreateAccountServiceWithDI } from '@services/index';
 import { defaultAccountCreateParams } from '@tests/mocks';
+import { createAccountServiceFunctionalWithDI } from '@services/index';
+import { accountFakeSaveOrUpdate } from '@repositories/index';
 
-describe('Tests for CreateAccountServiceWithDI', () => {
-  const repository = new AccountFakeRepository();
+describe('Tests for createAccountServiceFunctionalWithDI', () => {
+  const sysUnderTest = createAccountServiceFunctionalWithDI;
 
-  const sysUnderTest = new CreateAccountServiceWithDI(repository);
+  const repository = {
+    saveOrUpdate: accountFakeSaveOrUpdate
+  };
 
   it('Should call saveOrUpdate repository method', async () => {
     // saveOrUpdate repository implementation  will called, because we are only spying the function
     const repositorySpy = jest.spyOn(repository, 'saveOrUpdate');
 
-    await sysUnderTest.execute(defaultAccountCreateParams);
+    await sysUnderTest({
+      accountCreateParams: defaultAccountCreateParams,
+      repository
+    });
 
-    expect(repositorySpy).toHaveBeenCalledTimes(1);
+    expect(repositorySpy).toHaveBeenCalled();
   });
 
   it('Should create account with mock return of saveOrUpdate repository method', async () => {
     // saveOrUpdate repository implementation not will called, because it resolve value is mocked
     const repositorySpy = jest.spyOn(repository, 'saveOrUpdate').mockResolvedValueOnce();
 
-    await sysUnderTest.execute(defaultAccountCreateParams);
+    await sysUnderTest({
+      accountCreateParams: defaultAccountCreateParams,
+      repository
+    });
 
     expect(repositorySpy).toHaveBeenCalled();
   });
@@ -29,7 +37,10 @@ describe('Tests for CreateAccountServiceWithDI', () => {
     // saveOrUpdate repository implementation not will called, because it implementation overrided
     jest.spyOn(repository, 'saveOrUpdate').mockImplementationOnce(() => Promise.resolve());
 
-    const savedAccount = await sysUnderTest.execute(defaultAccountCreateParams);
+    const savedAccount = await sysUnderTest({
+      accountCreateParams: defaultAccountCreateParams,
+      repository
+    });
 
     expect(savedAccount).toEqual(expect.objectContaining(defaultAccountCreateParams));
   });
