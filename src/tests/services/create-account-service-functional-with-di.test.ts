@@ -9,39 +9,59 @@ describe('Tests for createAccountServiceFunctionalWithDI', () => {
     saveOrUpdate: accountFakeSaveOrUpdate
   };
 
-  it('Should call saveOrUpdate repository method', async () => {
-    // saveOrUpdate repository implementation  will called, because we are only spying the function
-    const repositorySpy = jest.spyOn(repository, 'saveOrUpdate');
+  describe('spies', () => {
+    it('Should call saveOrUpdate repository method', async () => {
+      // saveOrUpdate repository implementation  will called, because we are only spying the function
+      const repositorySpy = jest.spyOn(repository, 'saveOrUpdate');
 
-    await sysUnderTest({
-      accountCreateParams: defaultAccountCreateParams,
-      repository
+      await sysUnderTest({
+        accountCreateParams: defaultAccountCreateParams,
+        repository
+      });
+
+      expect(repositorySpy).toHaveBeenCalledTimes(1);
     });
-
-    expect(repositorySpy).toHaveBeenCalled();
   });
 
-  it('Should create account with mock return of saveOrUpdate repository method', async () => {
-    // saveOrUpdate repository implementation not will called, because it resolve value is mocked
-    const repositorySpy = jest.spyOn(repository, 'saveOrUpdate').mockResolvedValueOnce();
+  describe('stubs', () => {
+    it('Should call saveOrUpdate repository method', async () => {
+      // saveOrUpdate repository implementation with mock stub
+      const repositoryMock = {
+        saveOrUpdate: jest.fn()
+      };
 
-    await sysUnderTest({
-      accountCreateParams: defaultAccountCreateParams,
-      repository
+      await sysUnderTest({
+        accountCreateParams: defaultAccountCreateParams,
+        repository: repositoryMock
+      });
+
+      expect(repositoryMock.saveOrUpdate).toHaveBeenCalledTimes(1);
     });
-
-    expect(repositorySpy).toHaveBeenCalled();
   });
 
-  it('Should create account with mock implementation of saveOrUpdate repository method', async () => {
-    // saveOrUpdate repository implementation not will called, because it implementation overrided
-    jest.spyOn(repository, 'saveOrUpdate').mockImplementationOnce(() => Promise.resolve());
+  describe('mocks with spy', () => {
+    it('Should create account with saveOrUpdate repository method mock return ', async () => {
+      // saveOrUpdate repository implementation not will called, because it resolve value is mocked
+      const repositorySpy = jest.spyOn(repository, 'saveOrUpdate').mockResolvedValueOnce();
 
-    const savedAccount = await sysUnderTest({
-      accountCreateParams: defaultAccountCreateParams,
-      repository
+      await sysUnderTest({
+        accountCreateParams: defaultAccountCreateParams,
+        repository
+      });
+
+      expect(repositorySpy).toHaveBeenCalled();
     });
 
-    expect(savedAccount).toEqual(expect.objectContaining(defaultAccountCreateParams));
+    it('Should create account with saveOrUpdate repository method mock implementation', async () => {
+      // saveOrUpdate repository implementation not will called, because it implementation overrided
+      jest.spyOn(repository, 'saveOrUpdate').mockImplementationOnce(() => Promise.resolve());
+
+      const savedAccount = await sysUnderTest({
+        accountCreateParams: defaultAccountCreateParams,
+        repository
+      });
+
+      expect(savedAccount).toEqual(expect.objectContaining(defaultAccountCreateParams));
+    });
   });
 });
