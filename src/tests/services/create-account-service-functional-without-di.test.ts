@@ -21,7 +21,7 @@ describe('Tests for createAccountServiceFunctionalWithoutDI', () => {
     });
   });
 
-  describe('mocks', () => {
+  describe('mocks with spy', () => {
     it('Should create account with accountFakeSaveOrUpdate repository method mock resolved value', async () => {
       // accountFakeSaveOrUpdate repository implementation not will called, because it resolve value is mocked
       jest.spyOn(repository, 'accountFakeSaveOrUpdate').mockResolvedValueOnce();
