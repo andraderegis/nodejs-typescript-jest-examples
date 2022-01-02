@@ -1,4 +1,4 @@
-import { defaultAccountCreateParams } from '@tests/mocks';
+import { defaultAccountCreateParams } from '@tests/dummies';
 import { createAccountServiceFunctionalWithDI } from '@services/index';
 import { accountFakeSaveOrUpdate } from '@repositories/index';
 

@@ -1,5 +1,5 @@
 import { CreateAccountServiceWithoutDI } from '@services/index';
-import { defaultAccountCreateParams } from '@tests/mocks';
+import { defaultAccountCreateParams } from '@tests/dummies';
 
 const saveOrUpdateMock = jest.fn();
 

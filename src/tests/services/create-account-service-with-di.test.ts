@@ -1,6 +1,6 @@
 import { AccountFakeRepository } from '@repositories/index';
 import { CreateAccountServiceWithDI } from '@services/index';
-import { defaultAccountCreateParams } from '@tests/mocks';
+import { defaultAccountCreateParams } from '@tests/dummies';
 
 describe('Tests for CreateAccountServiceWithDI', () => {
   const repository = new AccountFakeRepository();

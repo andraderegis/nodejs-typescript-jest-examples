@@ -1,6 +1,6 @@
 import * as repository from '@repositories/index';
 import { createAccountServiceFunctionalWithoutDI as sysUnderTest } from '@services/index';
-import { defaultAccountCreateParams } from '@tests/mocks';
+import { defaultAccountCreateParams } from '@tests/dummies';
 
 // mock all module in file
 // jest.mock('@repositories/account-fake-functional-repository');
