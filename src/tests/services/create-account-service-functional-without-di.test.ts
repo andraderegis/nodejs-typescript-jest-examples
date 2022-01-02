@@ -7,12 +7,13 @@ import { defaultAccountCreateParams } from '@tests/mocks';
 
 // mock only accountFakeSaveOrUpdate module function
 jest.mock('@repositories/account-fake-functional-repository', () => ({
-  accountFakeSaveOrUpdate: jest.fn().mockImplementation()
+  accountFakeSaveOrUpdate: jest.fn()
 }));
 
 describe('Tests for createAccountServiceFunctionalWithoutDI', () => {
   describe('spies', () => {
     it('Should call accountFakeSaveOrUpdate repository method', async () => {
+      // saveOrUpdate repository implementation  will called, because we are only spying the function
       const repositorySpy = jest.spyOn(repository, 'accountFakeSaveOrUpdate');
 
       await sysUnderTest(defaultAccountCreateParams);

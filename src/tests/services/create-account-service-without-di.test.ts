@@ -13,10 +13,6 @@ jest.mock('@repositories/account-fake-repository', () => ({
 describe('Tests for CreateAccountServiceWithoutDI', () => {
   const sysUnderTest = new CreateAccountServiceWithoutDI();
 
-  beforeAll(() => {
-    saveOrUpdateMock.mockResolvedValue({});
-  });
-
   describe('spies', () => {
     it('Should call saveOrUpdate repository method', async () => {
       await sysUnderTest.execute(defaultAccountCreateParams);
@@ -29,6 +25,8 @@ describe('Tests for CreateAccountServiceWithoutDI', () => {
   describe('mocks', () => {
     it('Should create account with saveOrUpdate respository mock resolved value', async () => {
       // saveOrUpdate repository implementation not will called, because it resolve value is mocked
+      saveOrUpdateMock.mockResolvedValue({});
+
       const savedAccount = await sysUnderTest.execute(defaultAccountCreateParams);
 
       expect(savedAccount).toEqual(expect.objectContaining(defaultAccountCreateParams));

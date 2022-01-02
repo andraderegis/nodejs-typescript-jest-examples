@@ -18,35 +18,40 @@ describe('Tests for CreateAccountServiceWithDI', () => {
     });
 
     it('Should call saveOrUpdate repository method, checking cpf and name parameters ', async () => {
+      // saveOrUpdate repository implementation  will called, because we are only spying the function
       const repositorySpy = jest.spyOn(repository, 'saveOrUpdate');
 
       await sysUnderTest.execute(defaultAccountCreateParams);
 
-      // check pass parameters to saveOrUpdate repository implementation
+      // checking passed parameters for saveOrUpdate function
       expect(repositorySpy).toHaveBeenCalledWith(
         expect.objectContaining({
-          _cpf: '99988877722',
-          _name: 'user'
+          _cpf: defaultAccountCreateParams.cpf,
+          _name: defaultAccountCreateParams.name
         })
       );
     });
   });
 
   describe('stubs', () => {
-    it('Should create account with saveOrUpdate stub repository method', async () => {
-      const _sysUnderTest = new CreateAccountServiceWithDI({
-        saveOrUpdate: jest.fn(),
-        delete: jest.fn(),
-        findById: jest.fn()
-      });
+    it('Should call and create account with saveOrUpdate stub repository method', async () => {
+      // repository implementation with stub
+      const repositoryStub = {
+        saveOrUpdate: jest.fn().mockResolvedValue({}),
+        delete: jest.fn().mockResolvedValue({}),
+        findById: jest.fn().mockResolvedValue(defaultAccountCreateParams)
+      };
+
+      const _sysUnderTest = new CreateAccountServiceWithDI(repositoryStub);
 
       const savedAccount = await _sysUnderTest.execute(defaultAccountCreateParams);
 
+      expect(repositoryStub.saveOrUpdate).toBeCalledTimes(1);
       expect(savedAccount).toEqual(expect.objectContaining(defaultAccountCreateParams));
     });
   });
 
-  describe('mocks wit spy', () => {
+  describe('mocks with spy', () => {
     it('Should create account with saveOrUpdate repository method', async () => {
       // saveOrUpdate repository implementation not will called, because it resolve value is mocked
       jest.spyOn(repository, 'saveOrUpdate').mockResolvedValueOnce();

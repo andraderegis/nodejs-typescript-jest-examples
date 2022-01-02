@@ -24,18 +24,19 @@ describe('Tests for createAccountServiceFunctionalWithDI', () => {
   });
 
   describe('stubs', () => {
-    it('Should call saveOrUpdate repository method', async () => {
-      // saveOrUpdate repository implementation with mock stub
-      const repositoryMock = {
-        saveOrUpdate: jest.fn()
+    it('Should call and create account with saveOrUpdate stub repository method', async () => {
+      // saveOrUpdate repository implementation with stub
+      const repositoryStub = {
+        saveOrUpdate: jest.fn().mockResolvedValue({})
       };
 
-      await sysUnderTest({
+      const savedAccount = await sysUnderTest({
         accountCreateParams: defaultAccountCreateParams,
-        repository: repositoryMock
+        repository: repositoryStub
       });
 
-      expect(repositoryMock.saveOrUpdate).toHaveBeenCalledTimes(1);
+      expect(repositoryStub.saveOrUpdate).toHaveBeenCalledTimes(1);
+      expect(savedAccount).toEqual(expect.objectContaining(defaultAccountCreateParams));
     });
   });
 
