@@ -1,35 +1,46 @@
 import * as repository from '@repositories/index';
-import { createAccountServiceFunctionalWithoutDI } from '@services/index';
-import { defaultAccountCreateParams } from '@tests/mocks';
+import { createAccountServiceFunctionalWithoutDI as sysUnderTest } from '@services/index';
+import { defaultAccountCreateParams } from '@tests/dummies';
 
 // mock all module in file
 // jest.mock('@repositories/account-fake-functional-repository');
 
 // mock only accountFakeSaveOrUpdate module function
 jest.mock('@repositories/account-fake-functional-repository', () => ({
-  accountFakeSaveOrUpdate: jest.fn().mockImplementation()
+  accountFakeSaveOrUpdate: jest.fn()
 }));
 
 describe('Tests for createAccountServiceFunctionalWithoutDI', () => {
-  const sysUnderTest = createAccountServiceFunctionalWithoutDI;
+  describe('spies', () => {
+    it('Should call accountFakeSaveOrUpdate repository method', async () => {
+      // saveOrUpdate repository implementation  will called, because we are only spying the function
+      const repositorySpy = jest.spyOn(repository, 'accountFakeSaveOrUpdate');
 
-  it('Should create account with mock return of accountFakeSaveOrUpdate repository method', async () => {
-    // accountFakeSaveOrUpdate repository implementation not will called, because it resolve value is mocked
-    const repositorySpy = jest.spyOn(repository, 'accountFakeSaveOrUpdate').mockResolvedValueOnce();
+      await sysUnderTest(defaultAccountCreateParams);
 
-    await sysUnderTest(defaultAccountCreateParams);
-
-    expect(repositorySpy).toHaveBeenCalled();
+      expect(repositorySpy).toHaveBeenCalledTimes(1);
+    });
   });
 
-  it('Should create account with mock implementation of accountFakeSaveOrUpdate repository method', async () => {
-    // accountFakeSaveOrUpdate repository implementation not will called, because it implementation overrided
-    jest
-      .spyOn(repository, 'accountFakeSaveOrUpdate')
-      .mockImplementationOnce(() => Promise.resolve());
+  describe('mocks with spy', () => {
+    it('Should create account with accountFakeSaveOrUpdate repository method mock resolved value', async () => {
+      // accountFakeSaveOrUpdate repository implementation not will called, because it resolve value is mocked
+      jest.spyOn(repository, 'accountFakeSaveOrUpdate').mockResolvedValueOnce();
 
-    const savedAccount = await sysUnderTest(defaultAccountCreateParams);
+      const savedAccount = await sysUnderTest(defaultAccountCreateParams);
 
-    expect(savedAccount).toEqual(expect.objectContaining(defaultAccountCreateParams));
+      expect(savedAccount).toEqual(expect.objectContaining(defaultAccountCreateParams));
+    });
+
+    it('Should create account with accountFakeSaveOrUpdate repository method mock implementation', async () => {
+      // accountFakeSaveOrUpdate repository implementation not will called, because it implementation overrided
+      jest
+        .spyOn(repository, 'accountFakeSaveOrUpdate')
+        .mockImplementationOnce(() => Promise.resolve());
+
+      const savedAccount = await sysUnderTest(defaultAccountCreateParams);
+
+      expect(savedAccount).toEqual(expect.objectContaining(defaultAccountCreateParams));
+    });
   });
 });
